@@ -1,0 +1,85 @@
+<?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: Ralph
+ * Date: 12/1/13
+ * Time: 10:15 PM
+ * To change this template use File | Settings | File Templates.
+ */
+
+class CraftController extends AppController
+{
+    public function crafting()
+    {
+        is_char_exists();
+        is_logged_out();
+
+        $character = Character::get($_SESSION['username']);
+        $service = $character->getServiceLocator();
+        $level = $service->getEquipService()->getMaxEquip() + 1; // always show 1 level higher equipment
+        $existing_armors = $service->getEquipService()->getExistingEquipByType(Equip::TYPE_ARMOR);
+        $existing_weapons = $service->getEquipService()->getExistingEquipByType(Equip::TYPE_WEAPON);
+        $weapon_last_page = $service->getCraftService()->getLastPage(Equip::TYPE_WEAPON, $level, $existing_weapons);
+        $armor_last_page = $service->getCraftService()->getLastPage(Equip::TYPE_ARMOR, $level, $existing_armors);
+        $b_session = Character::isInBattle($character->char_id);
+        $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
+
+        $armor_page = page_validate(Param::get(Equip::TYPE_ARMOR), $armor_last_page);
+        $weapon_page = page_validate(Param::get(Equip::TYPE_WEAPON), $weapon_last_page);
+
+        try {
+            $weapons = Craft::getAll($weapon_page, $level, Equip::TYPE_WEAPON, $existing_weapons);
+            $armors = Craft::getAll($armor_page, $level, Equip::TYPE_ARMOR, $existing_armors);
+        } catch(RecordNotFoundException $e) {
+            $this->render(Error::RECORD_NOT_FOUND);
+        }
+
+        $this->set(get_defined_vars());
+    }
+
+    public function view()
+    {
+        $character = Character::get($_SESSION['username']);
+        $craft_materials = array();
+
+        try {
+            $equip = $character->getServiceLocator()->getEquipService()->get(Param::get('id'));
+            $equip->isEquipExisting();
+            $craft_service = $character->getServiceLocator()->getCraftService();
+            $craft_requirements = $craft_service->getCraftRequirements($equip->getName());
+
+            foreach ($craft_requirements as $cr) {
+                $inventory_materials = $craft_service->getCraftMaterials($cr->getName());
+                $cr->in_inventory = ($inventory_materials) ? $inventory_materials->getQuantity() : $inventory_materials;
+                $craft_materials[] = $cr;
+            }
+
+            if (Param::get('craft')) {
+                $craft_service->craftItem($equip, $craft_materials);
+                redirect('craft/craft_success', array('id' => $equip->equip_id));
+            }
+        } catch(RecordNotFoundException $e) {
+            $this->render(Error::RECORD_NOT_FOUND);
+        } catch(NotEnoughMaterialsException $e) {
+            $this->render(Error::NOT_ENOUGH_MATERIALS);
+        } catch(ItemExistsException $e) {
+            $this->render(Error::EQUIP_EXISTS);
+        }
+
+        $this->set(get_defined_vars());
+    }
+
+    public function craft_success()
+    {
+        $character = Character::get($_SESSION['username']);
+        try {
+            $equip = $character->getServiceLocator()->getEquipService()->get(Param::get('id'));
+            $equip->isEquipExisting();
+        } catch (RecordNotFoundException $e) {
+            redirect('craft/crafting');
+        } catch(ItemExistsException $e) {
+            $this->render(Error::EQUIP_EXISTS);
+        }
+        $this->set(get_defined_vars());
+    }
+}
