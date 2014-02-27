@@ -1,4 +1,5 @@
 app/config/core.php
+app/master/*.php
 app/tmp/logs/*.log
 app/webroot/bootstrap/img/*
 .idea
