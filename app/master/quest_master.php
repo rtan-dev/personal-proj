@@ -8,8 +8,8 @@
 class QuestMaster extends AppMaster
 {
     static $data = array(
-        1 => array(),
-        2 => array(),
-        3 => array(),
+        1 => array('id' => 1),
+        2 => array('id' => 2),
+        3 => array('id' => 3),
     );
 }

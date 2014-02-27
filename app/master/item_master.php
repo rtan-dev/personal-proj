@@ -7,5 +7,5 @@
  */
 class ItemMaster extends AppMaster
 {
-    
+    static $data = array();
 }
