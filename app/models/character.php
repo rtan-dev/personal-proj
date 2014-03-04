@@ -153,9 +153,9 @@ class Character extends AppModel
         return $this->char_name;
     }
 
-    public function getServiceLocator($service = null)
+    public function getServiceLocator()
     {
-        return new ServiceLocator($service, $this);
+        return new ServiceLocator($this);
     }
 
     public function isDuplicate()

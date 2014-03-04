@@ -19,11 +19,12 @@ class MonsterController extends AppController
 
         $character = Character::get($_SESSION['username']);
         $max_level = $character->getServiceLocator()->getEquipService()->getMaxEquip();
-        $last_page = $character->getServiceLocator()->getMonsterService()->getLastPage($max_level);
+        $monster_service = $character->getServiceLocator()->getMonsterService();
+        $last_page = $monster_service->getLastPage($max_level);
 
         $page = page_validate(Param::get('page'), $last_page);
-        $monsters = $character->getServiceLocator()->getMonsterService()->getAllMonsters($max_level, $page);
-        $attacks = $character->getServiceLocator()->getMonsterService()->getMonsterAttacks();
+        $monsters = $monster_service->getAllMonsters($max_level, $page);
+        $attacks = $monster_service->getMonsterAttacks();
 
         $b_session = Character::isInBattle($character->char_id);
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;

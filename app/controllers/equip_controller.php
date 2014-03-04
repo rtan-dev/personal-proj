@@ -31,17 +31,17 @@ class EquipController extends AppController
         $character = Character::get($_SESSION['username']);
         $b_session = Character::isInBattle($character->char_id);
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
-
-        $armor_last_page = $character->getServiceLocator()->getEquipService()->getLastPage(Equip::TYPE_ARMOR);
-        $weapon_last_page = $character->getServiceLocator()->getEquipService()->getLastPage(Equip::TYPE_WEAPON);
+        $equip_service = $character->getServiceLocator()->getEquipService();
+        $armor_last_page = $equip_service->getLastPage(Equip::TYPE_ARMOR);
+        $weapon_last_page = $equip_service->getLastPage(Equip::TYPE_WEAPON);
 
         $armor_page = page_validate(Param::get(Equip::TYPE_ARMOR), $armor_last_page);
         $weapon_page = page_validate(Param::get(Equip::TYPE_WEAPON), $weapon_last_page);
 
-        $weapons = $character->getServiceLocator()->getEquipService()->getAllWeapons($weapon_page);
-        $armors = $character->getServiceLocator()->getEquipService()->getAllArmors($armor_page);
-        $equipped_weapon = $character->getServiceLocator()->getEquipService()->getEquippedWeapon();
-        $equipped_armor = $character->getServiceLocator()->getEquipService()->getEquippedArmor();
+        $weapons = $equip_service->getAllWeapons($weapon_page);
+        $armors = $equip_service->getAllArmors($armor_page);
+        $equipped_weapon = $equip_service->getEquippedWeapon();
+        $equipped_armor = $equip_service->getEquippedArmor();
 
         if ($_POST) {
             $equipped_weapon->setNewWeaponID(Param::get('weapon_id'))->equip();

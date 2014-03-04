@@ -8,35 +8,11 @@
 
 class ServiceLocator
 {
-    private $service;
-    private $char = array();
     private $character;
 
-    public function __construct($service, Character $character)
+    public function __construct(Character $character)
     {
-        $this->char['character'] = $character;
         $this->character = $character;
-        $this->service = ($service) ? $service : null;
-    }
-
-    public function getService()
-    {
-        switch ($this->service) {
-            case 'craft':
-                return new Craft($this->char);
-            case 'equip':
-                return new Equip($this->char);
-            case 'hunt':
-                return new Hunt($this->char);
-            case 'item':
-                return new Item($this->char);
-            case 'rank':
-                return new Rank($this->char);
-            case 'shop':
-                return new Shop($this->char);
-            default:
-                throw new ServiceNotFoundException('Invalid service type requested');
-        }
     }
 
     public function getCraftService()
