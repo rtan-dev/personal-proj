@@ -43,7 +43,7 @@ class CraftController extends AppController
         $craft_materials = array();
 
         try {
-            $equip = $character->getServiceLocator()->getEquipService()->get(Param::get('id'));
+            $equip = Equip::get(Param::get('id'), $character);
             $equip->isEquipExisting();
             $craft_service = $character->getServiceLocator()->getCraftService();
             $craft_requirements = $craft_service->getCraftRequirements($equip->getName());
@@ -73,7 +73,7 @@ class CraftController extends AppController
     {
         $character = Character::get($_SESSION['username']);
         try {
-            $equip = $character->getServiceLocator()->getEquipService()->get(Param::get('id'));
+            $equip = Equip::get(Param::get('id'), $character);
             $equip->isEquipExisting();
         } catch (RecordNotFoundException $e) {
             redirect('craft/crafting');

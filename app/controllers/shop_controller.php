@@ -22,16 +22,17 @@ class ShopController extends AppController
         }
 
         $character = Character::get($_SESSION['username']);
-        $items = $character->getServiceLocator()->getShopService()->getShopItems();
+        $shop_service = $character->getServiceLocator()->getShopService();
+        $items = $shop_service->getShopItems();
         $potions = $character->getServiceLocator()->getItemService()->getPotions();
-        $b_session = Character::isInBattle($character->char_id);
+        $b_session = Character::isInBattle($character->getID());
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
 
         if($_POST) {
             $potion_quantity = Param::get('ptn_qty_count');
 
             try {
-                $shop_item = $character->getServiceLocator()->getShopService()->getItem(Param::get('inv_id'));
+                $shop_item = $shop_service->getItem(Param::get('inv_id'));
                 $shop_item->setQuantity($potion_quantity + Param::get('ptn_qty_min'))->buyItem();
                 $character->setZeny($character->zeny - Param::get('total_price'))->updateZeny();
                 $_SESSION['count'] = $potion_quantity;

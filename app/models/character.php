@@ -58,17 +58,17 @@ class Character extends AppModel
         try {
             $db->insert('characters', $params);
             $this->char_id = $db->lastInsertId();
-            $service = $this->getServiceLocator();
+            $equip_service = $this->getServiceLocator()->getEquipService();
 
             // third parameter will automatically equip the weapon
-            $service->getEquipService()->create(self::DEFAULT_WEAPON, Equip::TYPE_WEAPON, Equip::SET_EQUIP);
-            $service->getEquipService()->create(self::DEFAULT_ARMOR, Equip::TYPE_ARMOR, Equip::SET_EQUIP);
+            $equip_service->create(self::DEFAULT_WEAPON, Equip::TYPE_WEAPON, Equip::SET_EQUIP);
+            $equip_service->create(self::DEFAULT_ARMOR, Equip::TYPE_ARMOR, Equip::SET_EQUIP);
 
             // automatically create 5 herbs in inventory
             Item::create(Item::SET_HERB, Item::ITEM_TYPE_USEABLE, $this->getID(), Item::HERB_COUNT);
 
-            $weapon = $service->getEquipService()->get(self::DEFAULT_WEAPON);
-            $armor = $service->getEquipService()->get(self::DEFAULT_ARMOR);
+            $weapon = $equip_service->get(self::DEFAULT_WEAPON);
+            $armor = $equip_service->get(self::DEFAULT_ARMOR);
             $this->updateDmgArmor($weapon->getStat(), $armor->getStat());
             $db->commit();
         } catch(Exception $e) {

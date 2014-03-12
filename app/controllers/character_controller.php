@@ -41,8 +41,9 @@ class CharacterController extends AppController
         is_logged_out();
 
         $character = Character::get($_SESSION['username']);
-        $weapon = $character->getServiceLocator()->getEquipService()->getEquippedWeapon();
-        $armor = $character->getServiceLocator()->getEquipService()->getEquippedArmor();
+        $equip_service = $character->getServiceLocator()->getEquipService();
+        $weapon = $equip_service->getEquippedWeapon();
+        $armor = $equip_service->getEquippedArmor();
         $items = $character->getServiceLocator()->getItemService()->getPotions();
         $b_session = Character::isInBattle($character->char_id);
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;

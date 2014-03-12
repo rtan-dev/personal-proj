@@ -29,7 +29,7 @@ class EquipController extends AppController
         }
 
         $character = Character::get($_SESSION['username']);
-        $b_session = Character::isInBattle($character->char_id);
+        $b_session = Character::isInBattle($character->getID());
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
         $equip_service = $character->getServiceLocator()->getEquipService();
         $armor_last_page = $equip_service->getLastPage(Equip::TYPE_ARMOR);

@@ -84,11 +84,12 @@ class HuntController extends AppController
 
         $char = Character::get($_SESSION['username']);
         $monster = $char->getServiceLocator()->getMonsterService()->getMonster(Param::get('monster_id'));
-        $loots = $char->getServiceLocator()->getItemService()->getLoots($monster->getID());
+        $item_service = $char->getServiceLocator()->getItemService();
+        $loots = $item_service->getLoots($monster->getID());
 
         foreach ($loots as $loot) {
             try {
-                $item = $char->getServiceLocator()->getItemService()->getFromInventory(Item::ITEM_TYPE_LOOT, $loot->item_id);
+                $item = $item_service->getFromInventory(Item::ITEM_TYPE_LOOT, $loot->item_id);
                 $item->incr();
             } catch(RecordNotFoundException $e) {
                 Item::create($loot->item_id, Item::ITEM_TYPE_LOOT, $char->getID(), Item::DEFAULT_QUANTITY);
