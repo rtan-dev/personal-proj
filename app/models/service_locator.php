@@ -52,6 +52,6 @@ class ServiceLocator
 
     public function getQuestService()
     {
-
+        return new QuestService($this->character);
     }
 }
