@@ -29,9 +29,9 @@ class Weapon extends Equip
 
     public static function getAll($page, $char_name)
     {
-        $db = DB::conn();
         $offset = ($page - 1) * Equip::MAX_EQUIP;
 
+        $db = DB::conn();
         $rows = $db->rows(
             'SELECT i.*, e.* FROM inventory i INNER JOIN equipment e
             ON i.item_id = e.equip_id
@@ -44,10 +44,8 @@ class Weapon extends Equip
         );
 
         $weapons = array();
-        if ($rows) {
-            foreach ($rows as $row) {
-                $weapons[] = new self($row);
-            }
+        foreach ($rows as $row) {
+            $weapons[] = new self($row);
         }
 
         return $weapons;

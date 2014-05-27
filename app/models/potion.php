@@ -21,10 +21,8 @@ class Potion extends Item
         );
 
         $potions = array();
-        if ($rows) {
-            foreach ($rows as $row) {
-                $potions[] = new self($row);
-            }
+        foreach ($rows as $row) {
+            $potions[] = new self($row);
         }
         return $potions;
     }
