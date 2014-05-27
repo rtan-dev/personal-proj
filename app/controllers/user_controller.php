@@ -30,9 +30,10 @@ class UserController extends AppController
                     } catch(RecordNotFoundException $e) {
                         $page2 = 'character/character_create';
                     }
-                    $page = 'login_success';
                 }
-            } catch (ValidationException $e) {
+            } catch(ValidationException $e) {
+                $page = 'login';
+            } catch(RecordNotFoundException $e) {
                 $page = 'login';
             }
         }

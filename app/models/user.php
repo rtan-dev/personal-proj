@@ -9,11 +9,12 @@
 
 class User extends AppModel
 {
-    const LOGIN = 'login_failed';
+    const LOGIN = 'login_success';
     const REGISTER_OK = 'register_end';
 
     public $rep_password;
     public $page;
+    private $is_failed_login = false;
 
     public $validation = array(
         'username' => array(
@@ -93,6 +94,11 @@ class User extends AppModel
             )
         );
 
+        if (!$row) {
+            $this->is_failed_login = true;
+            throw new RecordNotFoundException;
+        }
+
         return $row;
     }
 
@@ -103,5 +109,10 @@ class User extends AppModel
         $uid = $db->value('SELECT user_id FROM user WHERE username=?', array($username));
 
         return $uid;
+    }
+
+    public function isFailedLogin()
+    {
+        return $this->is_failed_login;
     }
 }

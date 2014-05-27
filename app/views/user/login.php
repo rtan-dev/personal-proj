@@ -8,7 +8,7 @@
  */
 
 ?>
-<?php if ($user->hasError()) : ?>
+<?php if ($user->hasError() || $user->isFailedLogin()) : ?>
     <div class="error error-block">
         <h4 class="alert-heading">Validation Errors!</h4>
         <?php if (!empty($user->validation_errors['username']['length'])) : ?>
@@ -23,6 +23,10 @@
                 <?php eh($user->validation['password']['length'][1]) ?> and
                 <?php eh($user->validation['password']['length'][2]) ?>
                 characters in length.
+            </div>
+        <?php endif ?>
+        <?php if($user->isFailedLogin()) : ?>
+            <div><em>Login Failed!</em>
             </div>
         <?php endif ?>
     </div>
@@ -45,6 +49,6 @@
         <span>Not a user?<a href="<?php eh(url('user/register')) ?>"> Click Here </a></span>
         <input type="submit" value="Log In">
     </p>
-    <input type="hidden" name="page_next" value="login_failed">
+    <input type="hidden" name="page_next" value="login_success">
 </form>
 </div>
