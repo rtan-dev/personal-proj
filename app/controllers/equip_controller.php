@@ -28,7 +28,7 @@ class EquipController extends AppController
             unset($_SESSION['new_armor']);
         }
 
-        $character = Character::get($_SESSION['username']);
+        $character = $this->start();
         $b_session = Character::isInBattle($character->getID());
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
         $equip_service = $character->getServiceLocator()->getEquipService();

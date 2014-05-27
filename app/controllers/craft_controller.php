@@ -14,13 +14,14 @@ class CraftController extends AppController
         is_char_exists();
         is_logged_out();
 
-        $character = Character::get($_SESSION['username']);
-        $service = $character->getServiceLocator();
-        $level = $service->getEquipService()->getMaxEquip() + 1; // always show 1 level higher equipment
-        $existing_armors = $service->getEquipService()->getExistingEquipByType(Equip::TYPE_ARMOR);
-        $existing_weapons = $service->getEquipService()->getExistingEquipByType(Equip::TYPE_WEAPON);
-        $weapon_last_page = $service->getCraftService()->getLastPage(Equip::TYPE_WEAPON, $level, $existing_weapons);
-        $armor_last_page = $service->getCraftService()->getLastPage(Equip::TYPE_ARMOR, $level, $existing_armors);
+        $character = $this->start();
+        $craft_service = $character->getServiceLocator()->getCraftService();
+        $equip_service = $character->getServiceLocator()->getEquipService();
+        $level = $equip_service->getMaxEquip() + 1; // always show 1 level higher equipment
+        $existing_armors = $equip_service->getExistingEquipByType(Equip::TYPE_ARMOR);
+        $existing_weapons = $equip_service->getExistingEquipByType(Equip::TYPE_WEAPON);
+        $weapon_last_page = $craft_service->getLastPage(Equip::TYPE_WEAPON, $level, $existing_weapons);
+        $armor_last_page = $craft_service->getLastPage(Equip::TYPE_ARMOR, $level, $existing_armors);
         $b_session = Character::isInBattle($character->char_id);
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
 
@@ -71,7 +72,7 @@ class CraftController extends AppController
 
     public function craft_success()
     {
-        $character = Character::get($_SESSION['username']);
+        $character = $this->start();
         try {
             $equip = Equip::get(Param::get('id'), $character);
             $equip->isEquipExisting();

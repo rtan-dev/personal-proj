@@ -14,7 +14,7 @@ class RankController extends AppController
         is_char_exists();
         is_logged_out();
 
-        $character = Character::get($_SESSION['username']);
+        $character = $this->start();
         $b_session = Character::isInBattle($character->char_id);
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
         $rank_service = $character->getServiceLocator()->getRankService();
@@ -28,10 +28,10 @@ class RankController extends AppController
     {
         is_logged_out();
 
+        $your_char = $this->start();
         $character = Rank::getCharInfo(Param::get('id'));
         $weapon = $character->getServiceLocator()->getEquipService()->getEquippedWeapon();
         $armor = $character->getServiceLocator()->getEquipService()->getEquippedArmor();
-        $your_char = Character::get($_SESSION['username']);
         $b_session = Character::isInBattle($your_char->char_id);
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
 

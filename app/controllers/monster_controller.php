@@ -17,7 +17,7 @@ class MonsterController extends AppController
         is_char_exists();
         is_logged_out();
 
-        $character = Character::get($_SESSION['username']);
+        $character = $this->start();
         $max_level = $character->getServiceLocator()->getEquipService()->getMaxEquip();
         $monster_service = $character->getServiceLocator()->getMonsterService();
         $last_page = $monster_service->getLastPage($max_level);
@@ -34,7 +34,7 @@ class MonsterController extends AppController
 
     public function view()
     {
-        $character = Character::get($_SESSION['username']);
+        $character = $this->start();
         $max_level = $character->getServiceLocator()->getEquipService()->getMaxEquip();
         $b_session = Character::isInBattle($character->getID());
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;

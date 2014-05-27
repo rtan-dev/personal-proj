@@ -21,7 +21,7 @@ class ShopController extends AppController
             unset($_SESSION['count']);
         }
 
-        $character = Character::get($_SESSION['username']);
+        $character = $this->start();
         $shop_service = $character->getServiceLocator()->getShopService();
         $items = $shop_service->getShopItems();
         $potions = $character->getServiceLocator()->getItemService()->getPotions();
