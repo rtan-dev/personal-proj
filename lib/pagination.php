@@ -62,7 +62,7 @@ class Pagination
     public function setNextLink($page_link)
     {
         if ($this->page != $this->last_page) {
-            $this->page_string .= '<a class="btn-small no-line" href = "'.url('', array($page_link => $this->page + 1)).'">«</a>';
+            $this->page_string .= '<a class="btn-small no-line" href = "'.url('', array($page_link => $this->page + 1)).'">»</a>';
         }
     }
 

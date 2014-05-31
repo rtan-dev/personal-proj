@@ -25,8 +25,8 @@ class EquipController extends AppController
         $b_session = Character::isInBattle($character->getID());
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
         $equip_service = $character->getServiceLocator()->getEquipService();
-        $armor_pagination = new Pagination(Param::get(Equip::TYPE_ARMOR), $equip_service->getLastPage(Equip::TYPE_ARMOR));
-        $weapon_pagination = new Pagination(Param::get(Equip::TYPE_WEAPON), $equip_service->getLastPage(Equip::TYPE_WEAPON));
+        $armor_pagination = new Pagination($equip_service->getLastPage(Equip::TYPE_ARMOR), Param::get(Equip::TYPE_ARMOR));
+        $weapon_pagination = new Pagination($equip_service->getLastPage(Equip::TYPE_WEAPON), Param::get(Equip::TYPE_WEAPON));
 
         $weapons = $equip_service->getAllWeapons($weapon_pagination->getPage());
         $armors = $equip_service->getAllArmors($armor_pagination->getPage());
