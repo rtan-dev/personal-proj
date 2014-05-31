@@ -22,7 +22,7 @@ require_once CONFIG_DIR.'database.php';
 require_once CONFIG_DIR.'master.php';
 
 // lib
-require_once LIB_DIR.'pagination.php';
+require_once LIB_DIR.'pagination/pagination.php';
 
 spl_autoload_register(function($name) {
     $filename = Inflector::underscore($name) . '.php';
