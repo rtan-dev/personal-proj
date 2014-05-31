@@ -95,7 +95,7 @@
         </a>
         <?php endif ?>
     <?php endforeach ?>
-    <div class="pagination-box"><?php echo pagination($last_page, $page, Monster::CLICKABLE);; ?></div>
+    <div class="pagination-box"><?php echo $monster_pagination->paginate(Monster::CLICKABLE); ?></div>
 </div>
 </form>
 </div>

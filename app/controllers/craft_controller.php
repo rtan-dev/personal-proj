@@ -20,17 +20,14 @@ class CraftController extends AppController
         $level = $equip_service->getMaxEquip() + 1; // always show 1 level higher equipment
         $existing_armors = $equip_service->getExistingEquipByType(Equip::TYPE_ARMOR);
         $existing_weapons = $equip_service->getExistingEquipByType(Equip::TYPE_WEAPON);
-        $weapon_last_page = $craft_service->getLastPage(Equip::TYPE_WEAPON, $level, $existing_weapons);
-        $armor_last_page = $craft_service->getLastPage(Equip::TYPE_ARMOR, $level, $existing_armors);
         $b_session = Character::isInBattle($character->char_id);
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
 
-        $armor_page = page_validate(Param::get(Equip::TYPE_ARMOR), $armor_last_page);
-        $weapon_page = page_validate(Param::get(Equip::TYPE_WEAPON), $weapon_last_page);
-
+        $armor_pagination = new Pagination($craft_service->getLastPage(Equip::TYPE_ARMOR, $level, $existing_armors), Param::get(Equip::TYPE_ARMOR));
+        $weapon_pagination = new Pagination($craft_service->getLastPage(Equip::TYPE_WEAPON, $level, $existing_weapons), Param::get(Equip::TYPE_WEAPON));
         try {
-            $weapons = Craft::getAll($weapon_page, $level, Equip::TYPE_WEAPON, $existing_weapons);
-            $armors = Craft::getAll($armor_page, $level, Equip::TYPE_ARMOR, $existing_armors);
+            $weapons = Craft::getAll($weapon_pagination->getPage(), $level, Equip::TYPE_WEAPON, $existing_weapons);
+            $armors = Craft::getAll($armor_pagination->getPage(), $level, Equip::TYPE_ARMOR, $existing_armors);
         } catch(RecordNotFoundException $e) {
             $this->render(Error::RECORD_NOT_FOUND);
         }

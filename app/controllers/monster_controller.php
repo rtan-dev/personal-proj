@@ -20,10 +20,9 @@ class MonsterController extends AppController
         $character = $this->start();
         $max_level = $character->getServiceLocator()->getEquipService()->getMaxEquip();
         $monster_service = $character->getServiceLocator()->getMonsterService();
-        $last_page = $monster_service->getLastPage($max_level);
 
-        $page = page_validate(Param::get('page'), $last_page);
-        $monsters = $monster_service->getAllMonsters($max_level, $page);
+        $monster_pagination = new Pagination($monster_service->getLastPage($max_level), Param::get('page'));
+        $monsters = $monster_service->getAllMonsters($max_level, $monster_pagination->getPage());
         $attacks = $monster_service->getMonsterAttacks();
 
         $b_session = Character::isInBattle($character->getID());

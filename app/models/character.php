@@ -183,10 +183,8 @@ class Character extends AppModel
     }
 
     /**
-     * Updates the characters damage and armor.
      * @param $dmg
      * @param $armor
-     * @param $charid
      */
     public function updateDmgArmor($dmg, $armor)
     {
