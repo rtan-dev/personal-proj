@@ -25,12 +25,9 @@ class CraftController extends AppController
 
         $armor_pagination = new Pagination($craft_service->getLastPage(Equip::TYPE_ARMOR, $level, $existing_armors), Param::get(Equip::TYPE_ARMOR));
         $weapon_pagination = new Pagination($craft_service->getLastPage(Equip::TYPE_WEAPON, $level, $existing_weapons), Param::get(Equip::TYPE_WEAPON));
-        try {
-            $weapons = Craft::getAll($weapon_pagination->getPage(), $level, Equip::TYPE_WEAPON, $existing_weapons);
-            $armors = Craft::getAll($armor_pagination->getPage(), $level, Equip::TYPE_ARMOR, $existing_armors);
-        } catch(RecordNotFoundException $e) {
-            $this->render(Error::RECORD_NOT_FOUND);
-        }
+
+        $weapons = Craft::getAll($weapon_pagination->getPage(), $level, Equip::TYPE_WEAPON, $existing_weapons);
+        $armors = Craft::getAll($armor_pagination->getPage(), $level, Equip::TYPE_ARMOR, $existing_armors);
 
         $this->set(get_defined_vars());
     }

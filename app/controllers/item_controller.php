@@ -9,5 +9,17 @@
 
 class ItemController extends AppController
 {
+    public function index()
+    {
+        $character = $this->start();
+        $tab = Param::get('tab', 'potions');
 
+        switch ($tab) {
+            case Item::ITEM_TYPE_USEABLE:
+                break;
+            case Item::ITEM_TYPE_LOOT:
+        }
+
+        $this->set(get_defined_vars());
+    }
 }
