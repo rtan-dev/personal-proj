@@ -162,6 +162,7 @@
 10.3.11.125 - - [21/Mar/2014:12:45:00 +0800] "GET /favicon.ico HTTP/1.1" 404 183 "-" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36"
 10.3.11.125 - - [21/Mar/2014:12:45:03 +0800] "GET /user/register HTTP/1.1" 200 641 "http://10.3.11.244/" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36"
 10.3.11.125 - - [21/Mar/2014:12:45:06 +0800] "GET /user/login HTTP/1.1" 200 616 "http://10.3.11.244/user/register" "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.154 Safari/537.36"
+<<<<<<< HEAD
 10.3.11.111 - - [07/Apr/2014:17:06:40 +0800] "GET / HTTP/1.1" 200 618 "-" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.149 Safari/537.36"
 10.3.11.111 - - [07/Apr/2014:17:06:41 +0800] "GET /css/anim.css HTTP/1.1" 200 9704 "http://10.3.11.244/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.149 Safari/537.36"
 10.3.11.111 - - [07/Apr/2014:17:06:41 +0800] "GET /css/new-style.css HTTP/1.1" 200 31755 "http://10.3.11.244/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.149 Safari/537.36"

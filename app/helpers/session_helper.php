@@ -52,3 +52,13 @@ function is_logged_out()
         redirect('user/login');
     }
 }
+
+function set_new_equip($equip_type)
+{
+    $equip_name = '';
+    if (isset($_SESSION[$equip_type]) && !empty($_SESSION[$equip_type])) {
+        $equip_name = $_SESSION[$equip_type];
+        unset($_SESSION[$equip_type]);
+    }
+    return $equip_name;
+}
