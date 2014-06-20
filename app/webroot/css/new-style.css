@@ -907,7 +907,7 @@ li {
 }
 
 body#hunt_grounds #huntNav, body#equipment #equipNav, body#char_main #charNav, body#shop #shopNav,
-    body#rankings #rankNav, body#craft #craftNav {
+    body#rankings #rankNav, body#craft #craftNav, body#item #itemNav {
     -moz-box-shadow:inset 0px 0px 0px 0px #7a7979;
     -webkit-box-shadow:inset 0px 0px 0px 0px #7a7979;
     box-shadow:inset 0px 0px 0px 0px #7a7979;

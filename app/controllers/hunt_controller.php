@@ -14,7 +14,7 @@ class HuntController extends AppController
         is_char_exists();
         is_logged_out();
 
-        $character = Character::get($_SESSION['username']);
+        $character = $this->start();
         $monster = $character->getServiceLocator()->getMonsterService()->getMonster(Param::get('monster_id'));
         $items = $character->getServiceLocator()->getItemService()->getPotions();
         $weapon = $character->getServiceLocator()->getEquipService()->getEquippedWeapon();
@@ -82,13 +82,14 @@ class HuntController extends AppController
         unset($_SESSION['hunt']);
         unset($_SESSION['m_id']);
 
-        $char = Character::get($_SESSION['username']);
+        $char = $this->start();
         $monster = $char->getServiceLocator()->getMonsterService()->getMonster(Param::get('monster_id'));
-        $loots = $char->getServiceLocator()->getItemService()->getLoots($monster->getID());
+        $item_service = $char->getServiceLocator()->getItemService();
+        $loots = $item_service->getLoots($monster->getID());
 
         foreach ($loots as $loot) {
             try {
-                $item = $char->getServiceLocator()->getItemService()->getFromInventory(Item::ITEM_TYPE_LOOT, $loot->item_id);
+                $item = $item_service->getFromInventory(Item::ITEM_TYPE_LOOT, $loot->item_id);
                 $item->incr();
             } catch(RecordNotFoundException $e) {
                 Item::create($loot->item_id, Item::ITEM_TYPE_LOOT, $char->getID(), Item::DEFAULT_QUANTITY);

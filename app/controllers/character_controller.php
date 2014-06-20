@@ -34,17 +34,17 @@ class CharacterController extends AppController
         $this->render($page);
     }
 
-
     public function character_main()
     {
         is_char_exists();
         is_logged_out();
 
-        $character = Character::get($_SESSION['username']);
-        $weapon = $character->getServiceLocator()->getEquipService()->getEquippedWeapon();
-        $armor = $character->getServiceLocator()->getEquipService()->getEquippedArmor();
+        $character = $this->start();
+        $equip_service = $character->getServiceLocator()->getEquipService();
+        $weapon = $equip_service->getEquippedWeapon();
+        $armor = $equip_service->getEquippedArmor();
         $items = $character->getServiceLocator()->getItemService()->getPotions();
-        $b_session = Character::isInBattle($character->char_id);
+        $b_session = Character::isInBattle($character->getID());
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
 
         $this->set(get_defined_vars());

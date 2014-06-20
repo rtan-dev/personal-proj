@@ -55,7 +55,7 @@
                 </tr>
             <?php endforeach ?>
         </table>
-        <span style="text-decoration: none"><?php echo pagination($weapon_last_page, $weapon_page, Craft::CLICKABLE, Equip::TYPE_WEAPON); ?></span>
+        <span style="text-decoration: none"><?php echo $weapon_pagination->paginate(Equip::CLICKABLE, Equip::TYPE_WEAPON); ?></span>
     </div>
     <div class="craft-content2">
         <table>
@@ -86,7 +86,7 @@
                 </tr>
             <?php endforeach ?>
         </table>
-        <span style="text-decoration: none"><?php echo pagination($armor_last_page, $armor_page, Craft::CLICKABLE, Equip::TYPE_ARMOR); ?></span>
+        <span style="text-decoration: none"><?php echo $armor_pagination->paginate(Equip::CLICKABLE, Equip::TYPE_ARMOR); ?></span>
     </div>
 </div>
 </div>

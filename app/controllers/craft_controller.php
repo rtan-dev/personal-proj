@@ -14,25 +14,20 @@ class CraftController extends AppController
         is_char_exists();
         is_logged_out();
 
-        $character = Character::get($_SESSION['username']);
-        $service = $character->getServiceLocator();
-        $level = $service->getEquipService()->getMaxEquip() + 1; // always show 1 level higher equipment
-        $existing_armors = $service->getEquipService()->getExistingEquipByType(Equip::TYPE_ARMOR);
-        $existing_weapons = $service->getEquipService()->getExistingEquipByType(Equip::TYPE_WEAPON);
-        $weapon_last_page = $service->getCraftService()->getLastPage(Equip::TYPE_WEAPON, $level, $existing_weapons);
-        $armor_last_page = $service->getCraftService()->getLastPage(Equip::TYPE_ARMOR, $level, $existing_armors);
+        $character = $this->start();
+        $craft_service = $character->getServiceLocator()->getCraftService();
+        $equip_service = $character->getServiceLocator()->getEquipService();
+        $level = $equip_service->getMaxEquip() + 1; // always show 1 level higher equipment
+        $existing_armors = $equip_service->getExistingEquipByType(Equip::TYPE_ARMOR);
+        $existing_weapons = $equip_service->getExistingEquipByType(Equip::TYPE_WEAPON);
         $b_session = Character::isInBattle($character->char_id);
         $battle = ($b_session) ? Hunt::getBattle($b_session->in_battle, $b_session->monster_id) : null;
 
-        $armor_page = page_validate(Param::get(Equip::TYPE_ARMOR), $armor_last_page);
-        $weapon_page = page_validate(Param::get(Equip::TYPE_WEAPON), $weapon_last_page);
+        $armor_pagination = new Pagination($craft_service->getLastPage(Equip::TYPE_ARMOR, $level, $existing_armors), Param::get(Equip::TYPE_ARMOR));
+        $weapon_pagination = new Pagination($craft_service->getLastPage(Equip::TYPE_WEAPON, $level, $existing_weapons), Param::get(Equip::TYPE_WEAPON));
 
-        try {
-            $weapons = Craft::getAll($weapon_page, $level, Equip::TYPE_WEAPON, $existing_weapons);
-            $armors = Craft::getAll($armor_page, $level, Equip::TYPE_ARMOR, $existing_armors);
-        } catch(RecordNotFoundException $e) {
-            $this->render(Error::RECORD_NOT_FOUND);
-        }
+        $weapons = Craft::getAll($weapon_pagination->getPage(), $level, Equip::TYPE_WEAPON, $existing_weapons);
+        $armors = Craft::getAll($armor_pagination->getPage(), $level, Equip::TYPE_ARMOR, $existing_armors);
 
         $this->set(get_defined_vars());
     }
@@ -43,7 +38,7 @@ class CraftController extends AppController
         $craft_materials = array();
 
         try {
-            $equip = $character->getServiceLocator()->getEquipService()->get(Param::get('id'));
+            $equip = Equip::get(Param::get('id'), $character);
             $equip->isEquipExisting();
             $craft_service = $character->getServiceLocator()->getCraftService();
             $craft_requirements = $craft_service->getCraftRequirements($equip->getName());
@@ -71,9 +66,9 @@ class CraftController extends AppController
 
     public function craft_success()
     {
-        $character = Character::get($_SESSION['username']);
+        $character = $this->start();
         try {
-            $equip = $character->getServiceLocator()->getEquipService()->get(Param::get('id'));
+            $equip = Equip::get(Param::get('id'), $character);
             $equip->isEquipExisting();
         } catch (RecordNotFoundException $e) {
             redirect('craft/crafting');

@@ -2,17 +2,17 @@
 /**
  * Created by PhpStorm.
  * User: Ralph
- * Date: 2/15/14
- * Time: 8:46 AM
+ * Date: 5/31/14
+ * Time: 10:25 PM
  */
 ?>
 <div class="login">
     <div class="alert-container1">
         <h1 class="form-h1">Error.</h1>
         <p class="p-alert">
-            You already crafted this item.
+           Invalid item type.
             <br />
-            <a href="<?php eh(url('craft/crafting')) ?>">Click here to craft.</a>
+            <a href="<?php eh(url('item/index')) ?>">Click here to go back.</a>
         </p>
     </div>
 </div>

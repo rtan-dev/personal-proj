@@ -17,9 +17,11 @@ class CraftService
 
     public function craftItem(Equip $equip, $craft_materials = array())
     {
-        $service = $this->character->getServiceLocator();
+        $equip_service = $this->character->getServiceLocator()->getEquipService();
+
         $this->validateMaterials($craft_materials);
-        $service->getEquipService()->create($equip->getID(), $equip->getType());
+
+        $equip_service->create($equip->getID(), $equip->getType());
         foreach ($craft_materials as $craft_material) {
             $craft_material->decr($craft_material->getInInventory(), $craft_material->getQuantity());
         }

@@ -7,5 +7,10 @@
  */
 class QuestController extends AppController
 {
-
+    public function index()
+    {
+        $character = Character::get($_SESSION['username']);
+        $quest_service = $character->getServiceLocator()->getQuestService();
+        $this->set(get_defined_vars());
+    }
 }

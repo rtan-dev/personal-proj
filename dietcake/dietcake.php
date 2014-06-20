@@ -30,4 +30,3 @@ require_once DC_CORE_DIR.'model.php';
 require_once DC_CORE_DIR.'view.php';
 require_once DC_CORE_DIR.'controller.php';
 require_once DC_CORE_DIR.'dispatcher.php';
-require_once DC_CORE_DIR.'master.php';

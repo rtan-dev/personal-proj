@@ -18,6 +18,7 @@ class Character extends AppModel
     private $armor;
     private $hp;
     private $new_zeny;
+    private $item_storage;
 
     public $avatar;
     public $validation = array(
@@ -58,17 +59,17 @@ class Character extends AppModel
         try {
             $db->insert('characters', $params);
             $this->char_id = $db->lastInsertId();
-            $service = $this->getServiceLocator();
+            $equip_service = $this->getServiceLocator()->getEquipService();
 
             // third parameter will automatically equip the weapon
-            $service->getEquipService()->create(self::DEFAULT_WEAPON, Equip::TYPE_WEAPON, Equip::SET_EQUIP);
-            $service->getEquipService()->create(self::DEFAULT_ARMOR, Equip::TYPE_ARMOR, Equip::SET_EQUIP);
+            $equip_service->create(self::DEFAULT_WEAPON, Equip::TYPE_WEAPON, Equip::SET_EQUIP);
+            $equip_service->create(self::DEFAULT_ARMOR, Equip::TYPE_ARMOR, Equip::SET_EQUIP);
 
             // automatically create 5 herbs in inventory
             Item::create(Item::SET_HERB, Item::ITEM_TYPE_USEABLE, $this->getID(), Item::HERB_COUNT);
 
-            $weapon = $service->getEquipService()->get(self::DEFAULT_WEAPON);
-            $armor = $service->getEquipService()->get(self::DEFAULT_ARMOR);
+            $weapon = $equip_service->get(self::DEFAULT_WEAPON);
+            $armor = $equip_service->get(self::DEFAULT_ARMOR);
             $this->updateDmgArmor($weapon->getStat(), $armor->getStat());
             $db->commit();
         } catch(Exception $e) {
@@ -97,6 +98,14 @@ class Character extends AppModel
         }
 
         return new self($row);
+    }
+
+    public function getItemStorage()
+    {
+        if (!$this->item_storage) {
+            $this->item_storage = new ItemStorage($this);
+        }
+        return $this->item_storage;
     }
 
     public function setDamage($damage)
@@ -153,9 +162,9 @@ class Character extends AppModel
         return $this->char_name;
     }
 
-    public function getServiceLocator($service = null)
+    public function getServiceLocator()
     {
-        return new ServiceLocator($service, $this);
+        return new ServiceLocator($this);
     }
 
     public function isDuplicate()
@@ -183,10 +192,8 @@ class Character extends AppModel
     }
 
     /**
-     * Updates the characters damage and armor.
      * @param $dmg
      * @param $armor
-     * @param $charid
      */
     public function updateDmgArmor($dmg, $armor)
     {
