@@ -57,7 +57,7 @@
             <?php endforeach ?>
             <input type="hidden" id="type_weapon" value="weapon">
         </table>
-        <span style="text-decoration: none"><?php echo pagination($weapon_last_page, $weapon_page, Equip::CLICKABLE, Equip::TYPE_WEAPON); ?></span>
+        <span style="text-decoration: none"><?php echo $weapon_pagination->paginate(Equip::CLICKABLE, Equip::TYPE_WEAPON); ?></span>
     </div>
     <div class="inner-content2">
         <table>
@@ -95,7 +95,7 @@
                    id="gender"
                    value="<?php eh(get_gender($character->avatar))?>">
         </table>
-        <span style="text-decoration: none"><?php echo pagination($armor_last_page, $armor_page, Equip::CLICKABLE, Equip::TYPE_ARMOR); ?></span>
+        <span style="text-decoration: none"><?php echo $armor_pagination->paginate(Equip::CLICKABLE, Equip::TYPE_ARMOR); ?></span>
     </div>
     <div class="inner-content3">
         <table>
@@ -118,12 +118,12 @@
             <input type="button" id="btn_click" value="Current" onclick="setCurrent()">
         </div>
         <br />
-        <?php if(isset($wname) || isset($aname)) : ?>
+        <?php if($wname || $aname) : ?>
         <div class="equip-log">
-            <?php if (isset($wname)) : ?>
+            <?php if ($wname) : ?>
                 You have equipped <b><?php eh($wname) ?></b>. <br />
             <?php endif ?>
-            <?php if(isset($aname)) : ?>
+            <?php if($aname) : ?>
                 You have equipped <b><?php eh($aname) ?></b>. <br />
             <?php endif ?>
         </div>

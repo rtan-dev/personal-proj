@@ -73,15 +73,10 @@ class Equip extends AppModel
 
     public static function getExistingEquipByType($char_id, $type)
     {
-        $equip = array();
         $db = DB::conn();
-
         $rows = $db->rows('SELECT item_id FROM inventory WHERE char_id = ? and item_type = ?', array($char_id, $type));
 
-        if (!$rows) {
-            throw new RecordNotFoundException('No records found in database');
-        }
-
+        $equip = array();
         foreach ($rows as $row) {
             $equip[] = $row['item_id'];
         }
@@ -105,6 +100,7 @@ class Equip extends AppModel
     {
         $db = DB::conn();
 
+        $db->begin();
         $params = array(
             'item_id' => $this->equip_id,
             'item_type' => $this->equip_type,
@@ -112,5 +108,6 @@ class Equip extends AppModel
         );
 
         $db->update('inventory', array('equiped' => self::SET_UNEQUIP), $params);
+        $db->commit();
     }
 }

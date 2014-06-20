@@ -18,6 +18,7 @@ class Character extends AppModel
     private $armor;
     private $hp;
     private $new_zeny;
+    private $item_storage;
 
     public $avatar;
     public $validation = array(
@@ -97,6 +98,14 @@ class Character extends AppModel
         }
 
         return new self($row);
+    }
+
+    public function getItemStorage()
+    {
+        if (!$this->item_storage) {
+            $this->item_storage = new ItemStorage($this);
+        }
+        return $this->item_storage;
     }
 
     public function setDamage($damage)
@@ -183,10 +192,8 @@ class Character extends AppModel
     }
 
     /**
-     * Updates the characters damage and armor.
      * @param $dmg
      * @param $armor
-     * @param $charid
      */
     public function updateDmgArmor($dmg, $armor)
     {

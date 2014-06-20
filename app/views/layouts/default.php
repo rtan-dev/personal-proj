@@ -29,7 +29,9 @@
                 <?php if (isset($_SESSION['username'])) : ?>
                 <li>
                     <a id="charNav" class="link-button" href="<?php eh(url('character/character_main')) ?>">Character</a>
-
+                </li>
+                <li>
+                    <a id="itemNav" class="link-button" href="<?php eh(url('item/index')) ?>">Items</a>
                 </li>
                 <li>
                     <a id="equipNav" class="link-button" href="<?php eh(url('equip/equipment')) ?>">Equipment</a>
